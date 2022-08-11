@@ -15,5 +15,5 @@ public class BookDTO {
     private String title;
     private int pages;
     private Author author;
-    private Set<Genre> genres = new HashSet<>();
+    private Set<GenreDTO> genres = new HashSet<>();
 }
