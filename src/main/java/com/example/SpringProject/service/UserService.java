@@ -49,7 +49,7 @@ public class UserService {
 
         ReadingList readingList = mapper.map(createReadingListDTO, ReadingList.class);
         ReadingListDTO readingListDTO = mapper.map(readingList, ReadingListDTO.class);
-        readingList.setName(readingListDTO.getName());
+        readingList.setName(createReadingListDTO.getName());
         readingList = readingListRepository.save(readingList);
 
         responseUserDTO.getUserReadingLists().add(mapper.map(readingList, ReadingListDTO.class));

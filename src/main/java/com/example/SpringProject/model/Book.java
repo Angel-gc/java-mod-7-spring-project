@@ -31,11 +31,11 @@ public class Book {
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate published;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="author_id")
     private Author author;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="book_genres",
             joinColumns=@JoinColumn(name="book_id"),
             inverseJoinColumns=@JoinColumn(name="genre_id"))

@@ -1,6 +1,6 @@
 package com.example.SpringProject.controller;
 
-import com.example.SpringProject.dto.BookDTO;
+import com.example.SpringProject.dto.ResponseBookDTO;
 import com.example.SpringProject.dto.CreateBookDTO;
 import com.example.SpringProject.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,12 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public List<BookDTO> getBooks(){
+    public List<ResponseBookDTO> getBooks(){
         return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
-    public BookDTO getBook(@PathVariable int id){
+    public ResponseBookDTO getBook(@PathVariable int id){
         return bookService.getBook(id);
     }
 
@@ -32,8 +32,8 @@ public class BookController {
     }
 
     @PutMapping("/{id}")
-    public BookDTO updateBook(@PathVariable int id){
-        return updateBook(id);
+    public CreateBookDTO updateBook(@PathVariable int id, @RequestBody CreateBookDTO createBookDTO){
+        return bookService.updateBook(id, createBookDTO);
     }
 
     @DeleteMapping("/{id}")

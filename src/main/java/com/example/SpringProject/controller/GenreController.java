@@ -1,6 +1,6 @@
 package com.example.SpringProject.controller;
 
-import com.example.SpringProject.dto.BookDTO;
+import com.example.SpringProject.dto.ResponseBookDTO;
 import com.example.SpringProject.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ public class GenreController {
     private BookService bookService;
 
     @GetMapping("/{id}/books")
-    public Set<BookDTO> getBooks(@PathVariable int id){
+    public Set<ResponseBookDTO> getBooks(@PathVariable int id){
         return bookService.getGenreBooks(id);
     }
 }
