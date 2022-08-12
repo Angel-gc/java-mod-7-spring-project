@@ -20,20 +20,24 @@ public class BookController {
     public List<BookDTO> getBooks(){
         return bookService.getAllBooks();
     }
+
     @GetMapping("/{id}")
     public BookDTO getBook(@PathVariable int id){
         return bookService.getBook(id);
     }
+
     @PostMapping
     public CreateBookDTO createBook(@Valid @RequestBody CreateBookDTO createBookDTO) {
         return bookService.create(createBookDTO);
     }
-    @PutMapping("/{id}")
-    public void updateBook(@PathVariable int id){
 
+    @PutMapping("/{id}")
+    public BookDTO updateBook(@PathVariable int id){
+        return updateBook(id);
     }
+
     @DeleteMapping("/{id}")
-    public void deleteBook(int id){
+    public void deleteBook(@PathVariable int id){
         bookService.deleteBook(id);
     }
 }

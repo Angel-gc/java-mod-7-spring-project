@@ -23,8 +23,6 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
     @Autowired
-    private AuthorRepository authorRepository;
-    @Autowired
     private GenreRepository genreRepository;
 
     @Autowired
@@ -32,7 +30,8 @@ public class BookService {
 
     public CreateBookDTO create(CreateBookDTO createBookDTO){
         Book book = mapper.map(createBookDTO, Book.class);
-        return mapper.map(bookRepository.save(book), CreateBookDTO.class);
+        book = bookRepository.save(book);
+        return mapper.map(book, CreateBookDTO.class);
     }
     public List<BookDTO> getAllBooks(){
         return bookRepository.findAll().stream().map(book -> mapper.map(book, BookDTO.class)).collect(Collectors.toList());
@@ -54,17 +53,12 @@ public class BookService {
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "genre not found"));
         return genre.getGenreBooks();
     }
-    public void updateBook(int id){
+    public BookDTO updateBook(int id){
         BookDTO bookDTO = getBook(id);
         Book book = mapper.map(bookDTO, Book.class);
-        book.setAuthor(authorRepository.findById(bookDTO.getAuthor().getId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "author to set was not found")));
-//        book.setGenres(genreRepository.findAllById(bookDTO
-//                .getGenres()
-//                .stream()
-//                .map(genre -> {
-//                   ;
-//                })));
+        book.setId(id);
+        bookDTO.setId(id);
 
+        return mapper.map(bookRepository.save(book), BookDTO.class);
     }
 }
