@@ -10,6 +10,5 @@ import java.util.Set;
 public class ResponseUserDTO {
     private int id;
     private String username;
-    private String password;
-    private Set<ReadingListDTO> userReadingLists = new HashSet<>();
+    private Set<ReadingListDTO> readingLists = new HashSet<>();
 }

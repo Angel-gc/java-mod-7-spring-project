@@ -21,4 +21,7 @@ public class LibraryMember {
     private String username;
     @NotBlank
     private String password;
+
+    @OneToMany(mappedBy = "libraryMember")
+    Set<ReadingList> readingLists = new HashSet<>();
 }
