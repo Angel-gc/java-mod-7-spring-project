@@ -35,6 +35,9 @@ public class Book {
     @JoinColumn(name="author_id")
     private Author author;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<ReadingList> readingLists = new HashSet<>();
+
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="book_genres",
             joinColumns=@JoinColumn(name="book_id"),

@@ -9,5 +9,5 @@ import java.util.Set;
 public class ReadingListDTO {
     private int id;
     private String name;
-    private Set<ResponseBookDTO> listOfBooksToRead = new HashSet<>();
+    private Set<ResponseBookDTO> books = new HashSet<>();
 }

@@ -4,6 +4,7 @@ import com.example.SpringProject.dto.*;
 import com.example.SpringProject.model.Book;
 import com.example.SpringProject.model.LibraryMember;
 import com.example.SpringProject.model.ReadingList;
+import com.example.SpringProject.repository.BookRepository;
 import com.example.SpringProject.repository.LibraryMemberRepository;
 import com.example.SpringProject.repository.ReadingListRepository;
 import org.apache.coyote.Response;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,6 +27,10 @@ public class UserService {
     private LibraryMemberRepository libraryMemberRepository;
     @Autowired
     private ReadingListRepository readingListRepository;
+    @Autowired
+    private BookRepository bookRepository;
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private ModelMapper mapper;
@@ -41,28 +47,42 @@ public class UserService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
         }
     }
-
-    public ResponseUserDTO getLists(int id){
-       LibraryMember user = libraryMemberRepository.findById(id).get();
-
-           return mapper.map(user, ResponseUserDTO.class);
+    //problem with users not having any books saved into their reading list
+    public Set<ReadingListDTO> getLists(int id){
+        Set<ReadingList> readingLists = readingListRepository.findAllByLibraryMemberId(id);
+        Set<ReadingListDTO> readingListDTOS = new HashSet<>();
+        for (ReadingList readingList: readingLists){
+            readingListDTOS.add(mapper.map(readingList, ReadingListDTO.class));
+        }
+        return readingListDTOS;
     }
 
     public ResponseUserDTO createListForUser(int id, CreateReadingListDTO createReadingListDTO){
-        LibraryMember user = libraryMemberRepository.findById(id).get();
-        Set<ResponseBookDTO> responseBookDTOS = createReadingListDTO.getListOfBooksToRead();
-        ReadingList readingList = mapper.map(responseBookDTOS, ReadingList.class);
-        readingList.setName(createReadingListDTO.getName());
-        Set<Book> listOfBooksToRead = new HashSet<>();
-        for (ResponseBookDTO b: responseBookDTOS){
-            listOfBooksToRead.add(mapper.map(b, Book.class));
-        }
-        readingList.setBooks(listOfBooksToRead);
-        readingList.setBooks(listOfBooksToRead);
-        readingListRepository.save(readingList);
-        user.getReadingLists().add(readingList);
+        try {
+            LibraryMember user = libraryMemberRepository.findById(id).get();
+            Set<ResponseBookDTO> responseBookDTOS = createReadingListDTO.getNewList();
+            ReadingList readingList = mapper.map(responseBookDTOS, ReadingList.class);
+            readingList.setName(createReadingListDTO.getName());
+            Set<Book> booksToSet = new HashSet<>();
 
-        return mapper.map(libraryMemberRepository.save(user), ResponseUserDTO.class);
+            for (ResponseBookDTO r : responseBookDTOS) {
+                Book book = mapper.map(r, Book.class);
+                if (!bookRepository.existsById(book.getId())) {
+                    CreateBookDTO createBookDTO = bookService.create(mapper.map(book, CreateBookDTO.class));
+                    book = mapper.map(createBookDTO, Book.class);
+                }
+                readingList.addBook(book);
+                booksToSet.add(book);
+            }
+            readingList.setBooks(booksToSet);
+            readingList.setLibraryMember(user);
+            readingListRepository.save(readingList);
+            user.addReadingList(readingList);
+            libraryMemberRepository.save(user);
+            return mapper.map(user, ResponseUserDTO.class);
+        } catch (NoSuchElementException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
+        }
     }
 
     public ReadingListDTO getList(int id, int list_id){

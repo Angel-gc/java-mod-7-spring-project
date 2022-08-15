@@ -26,7 +26,7 @@ public class LibraryMemberController {
     }
 
     @GetMapping("/{id}/reading_lists")
-    public ResponseUserDTO getUserLists(@PathVariable int id){
+    public Set<ReadingListDTO> getUserLists(@PathVariable int id){
         return userService.getLists(id);
     }
 

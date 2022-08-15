@@ -3,6 +3,7 @@ package com.example.SpringProject.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +14,7 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@ToString
 public class ReadingList {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +27,11 @@ public class ReadingList {
     @JoinColumn(name = "user_id")
     private LibraryMember libraryMember;
 
-    @ManyToMany
-    @JoinTable(name="reading_list_books",
-            joinColumns=@JoinColumn(name="reading_list_id"),
-            inverseJoinColumns=@JoinColumn(name="book_id"))
+    @ManyToMany(mappedBy = "readingLists", fetch = FetchType.EAGER)
+    @ToString.Exclude
     private Set<Book> books = new HashSet<>();
+
+    public void addBook(Book book){
+        books.add(book);
+    }
 }
