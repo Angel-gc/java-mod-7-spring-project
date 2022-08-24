@@ -1,6 +1,5 @@
 package com.example.SpringProject.dto;
 
-import com.example.SpringProject.model.Author;
 import lombok.Data;
 
 import java.time.LocalDate;

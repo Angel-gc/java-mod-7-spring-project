@@ -2,13 +2,13 @@ package com.example.SpringProject.service;
 
 import com.example.SpringProject.dto.*;
 import com.example.SpringProject.model.*;
-import com.example.SpringProject.repository.AuthorRepository;
+
 import com.example.SpringProject.repository.BookRepository;
 import com.example.SpringProject.repository.GenreRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,8 +25,6 @@ public class BookService {
     private BookRepository bookRepository;
     @Autowired
     private GenreRepository genreRepository;
-    @Autowired
-    private AuthorRepository authorRepository;
 
     @Autowired
     private ModelMapper mapper;

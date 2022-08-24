@@ -1,7 +1,7 @@
 package com.example.SpringProject.controller;
 
 import com.example.SpringProject.dto.*;
-import com.example.SpringProject.model.ReadingList;
+
 import com.example.SpringProject.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
