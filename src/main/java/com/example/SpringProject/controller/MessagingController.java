@@ -1,6 +1,7 @@
 package com.example.SpringProject.controller;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -68,9 +69,10 @@ public class MessagingController {
         return userMessages;
     }
     @CrossOrigin(origins = "http://localhost:4200")
-    @DeleteMapping("/api/delete-user-message")
-    public void deleteUserMessage(@RequestBody Message messageToDelete) {
-        userMessages.remove(messageToDelete);
+    @DeleteMapping("/api/delete-user-message/{conversationId}/{sequenceNumber}")
+    public void deleteUserMessage(@PathVariable int conversationId, @PathVariable int sequenceNumber) {
+//        userMessages.stream().filter((msg) -> (msg.sequenceNumber != sequenceNumber & msg.conversationId != conversationId)).collect(Collectors.toList());
+        userMessages.removeIf(msg -> msg.conversationId == conversationId & msg.sequenceNumber == sequenceNumber);
     }
 }
 
