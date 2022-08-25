@@ -71,7 +71,6 @@ public class MessagingController {
     @CrossOrigin(origins = "http://localhost:4200")
     @DeleteMapping("/api/delete-user-message/{conversationId}/{sequenceNumber}")
     public void deleteUserMessage(@PathVariable int conversationId, @PathVariable int sequenceNumber) {
-//        userMessages.stream().filter((msg) -> (msg.sequenceNumber != sequenceNumber & msg.conversationId != conversationId)).collect(Collectors.toList());
         userMessages.removeIf(msg -> msg.conversationId == conversationId & msg.sequenceNumber == sequenceNumber);
     }
 }
